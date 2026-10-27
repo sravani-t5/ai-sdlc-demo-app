@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+sha=$(git log -1 --pretty=%h)
+subject=$(git log -1 --pretty=%s)
+"$(git rev-parse --show-toplevel)/scripts/log-ai.sh" "git-hook" "commit $sha" "Commit created" "$subject"
