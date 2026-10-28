@@ -16,3 +16,5 @@
 | 2026-10-28 09:38 | copilot (spec-kit) | plan | Generated plan, research, data model, contracts | plan.md and related files created |
 | 2026-10-28 09:38 | copilot (spec-kit) | tasks | Generated task breakdown in two phases | tasks.md created |
 | 2026-10-28 09:38 | claude-chat | tasks-review | Reviewed tasks.md | Fixed T009 Admin gate, added invoice approver list, legacy Approver test, mutation baseline task |
+| 2026-10-28 09:38 | git-hook | commit bbf629b | Commit created | docs: add Spec Kit constitution, specification, plan and tasks for approval limits |
+| 2026-10-28 09:44 | claude-chat | baseline | Ran Stryker 4.13.0 baseline on 7 existing tests | Score 30.77 percent (12 killed, 10 survived, 17 no coverage); saved to notes-mutation-before.txt |
