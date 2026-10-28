@@ -4,7 +4,8 @@ namespace InvoiceApp.Domain;
 
 /// <summary>
 /// Moves an invoice through its lifecycle: Draft -> PendingApproval -> Approved or Rejected.
-/// Step 1: a single approver decides, within the limit of their role.
+/// High-value invoices require a first approval plus a second, different Director approval.
+/// Lower-value invoices follow the single-approver role rules and limits.
 /// </summary>
 public class ApprovalService
 {
@@ -41,6 +42,15 @@ public class ApprovalService
     {
         var invoice = Find(invoiceId);
         EnsurePending(invoice);
+
+        if (invoice.Amount > DirectorApprovalLimit)
+        {
+            // Validate everything first; nothing on the invoice changes if this throws.
+            var effectiveRole = ValidateHighValueApproval(invoice, approver, role);
+            RecordHighValueApproval(invoice, approver, effectiveRole);
+            _repository.Update(invoice);
+            return invoice;
+        }
 
         // Validate everything first; nothing on the invoice changes if this throws.
         ValidateApprovalRole(invoice, approver, role);
@@ -85,14 +95,7 @@ public class ApprovalService
 
     private static void ValidateApprovalRole(Invoice invoice, string approver, string role)
     {
-        var effectiveRole = ResolveEffectiveRole(role);
-
-        if (effectiveRole is null)
-        {
-            throw new ApprovalRuleViolationException(
-                $"Role '{role}' cannot approve invoices. Only Manager and Director may approve.");
-        }
-
+        var effectiveRole = RequireApprovalRole(role);
         var limit = effectiveRole == DirectorRole ? DirectorApprovalLimit : ManagerApprovalLimit;
 
         if (invoice.Amount > limit)
@@ -102,6 +105,58 @@ public class ApprovalService
                 $"amount {FormatAmount(invoice.Amount)} exceeds the {effectiveRole} limit of {FormatAmount(limit)}.");
         }
     }
+
+    // Returns the effective role (Manager or Director) of a valid approval attempt.
+    private static string ValidateHighValueApproval(Invoice invoice, string approver, string role)
+    {
+        var effectiveRole = RequireApprovalRole(role);
+
+        if (invoice.Approvers.Count == 0)
+        {
+            // First approval: a Manager or a Director is accepted.
+            return effectiveRole;
+        }
+
+        // Stored usernames are already trimmed, so only the incoming name needs trimming.
+        var normalizedApprover = approver.Trim();
+        var sameUserAlreadyApproved = invoice.Approvers.Any(existing =>
+            string.Equals(existing.Username, normalizedApprover, StringComparison.OrdinalIgnoreCase));
+
+        if (sameUserAlreadyApproved)
+        {
+            throw new ApprovalRuleViolationException(
+                $"User '{normalizedApprover}' cannot approve invoice {invoice.Id} because the same user already approved it.");
+        }
+
+        if (effectiveRole != DirectorRole)
+        {
+            throw new ApprovalRuleViolationException(
+                $"Invoice {invoice.Id} requires a second approver from a different Director.");
+        }
+
+        return effectiveRole;
+    }
+
+    private static void RecordHighValueApproval(Invoice invoice, string approver, string effectiveRole)
+    {
+        var username = approver.Trim();
+        invoice.Approvers.Add(new InvoiceApprover(username, effectiveRole));
+
+        if (invoice.Approvers.Count < 2)
+        {
+            // First approval: the invoice stays PendingApproval.
+            return;
+        }
+
+        invoice.Status = InvoiceStatus.Approved;
+        invoice.DecidedBy = username;
+        invoice.DecidedAt = DateTime.UtcNow;
+    }
+
+    private static string RequireApprovalRole(string role) =>
+        ResolveEffectiveRole(role)
+        ?? throw new ApprovalRuleViolationException(
+            $"Role '{role}' cannot approve invoices. Only Manager and Director may approve.");
 
     // Returns Manager or Director, or null when the role has no approval authority.
     // The legacy Approver role counts as Manager. Admin and unknown roles return null.
@@ -117,7 +172,7 @@ public class ApprovalService
         };
     }
 
-    // Plain number, no currency symbol, same output on every machine.
-        private static string FormatAmount(decimal amount) =>
+    // Plain number with comma grouping, no currency symbol, same output on every machine.
+    private static string FormatAmount(decimal amount) =>
         amount.ToString("#,##0.##", CultureInfo.InvariantCulture);
 }
