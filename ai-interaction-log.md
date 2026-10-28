@@ -18,3 +18,6 @@
 | 2026-10-28 09:38 | claude-chat | tasks-review | Reviewed tasks.md | Fixed T009 Admin gate, added invoice approver list, legacy Approver test, mutation baseline task |
 | 2026-10-28 09:38 | git-hook | commit bbf629b | Commit created | docs: add Spec Kit constitution, specification, plan and tasks for approval limits |
 | 2026-10-28 09:44 | claude-chat | baseline | Ran Stryker 4.13.0 baseline on 7 existing tests | Score 30.77 percent (12 killed, 10 survived, 17 no coverage); saved to notes-mutation-before.txt |
+| 2026-10-28 09:44 | git-hook | commit 90c8e4e | Commit created | test: record mutation baseline before approval limits |
+| 2026-10-28 09:50 | implementer | Phase 1 | Added role-aware approval validation, named limits, and failing boundary tests for Manager/Director/Admin/unknown/legacy Approver cases | Updated ApprovalService and controller gate, then ran the solution test suite to verify the fix |
+| 2026-10-28 10:10 | claude-chat | step1-review | Reviewed Phase 1 code and tests, fixed culture-dependent currency format and a test coupled to a duplicate literal | 14 tests pass; hand mutation check (> to >=) failed 3 boundary tests as expected |
