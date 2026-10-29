@@ -30,3 +30,4 @@
 | 2026-10-29 05:30 | claude-chat | e2e | Wrote Playwright page object and test for rejected over-limit approval | 1 e2e test passes; with Manager limit temporarily raised to 60000 the test failed as expected, then limit restored |
 | 2026-10-29 05:31 | git-hook | commit e40a014 | Commit created | test: add Playwright e2e for rejected over-limit approval |
 | 2026-10-29 05:49 | claude-chat | mutation-fix | Reviewed surviving mutants, added tests and InvoiceTests, made fake repository record saves | Whole-project score 30.77 to 74.29 percent; approval code 98.04 percent; 1 equivalent mutant dismissed |
+| 2026-10-29 05:49 | git-hook | commit efe6630 | Commit created | test: strengthen approval tests to kill surviving mutants |
