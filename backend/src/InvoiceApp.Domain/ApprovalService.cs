@@ -42,6 +42,7 @@ public class ApprovalService
     {
         var invoice = Find(invoiceId);
         EnsurePending(invoice);
+        EnsureApproverIsNamed(approver);
 
         if (invoice.Amount > DirectorApprovalLimit)
         {
@@ -78,6 +79,14 @@ public class ApprovalService
         invoice.DecisionNote = reason;
         _repository.Update(invoice);
         return invoice;
+    }
+
+    private static void EnsureApproverIsNamed(string? approver)
+    {
+        if (string.IsNullOrWhiteSpace(approver))
+        {
+            throw new ApprovalRuleViolationException("An approver username is required to approve an invoice.");
+        }
     }
 
     private Invoice Find(string invoiceId) =>
