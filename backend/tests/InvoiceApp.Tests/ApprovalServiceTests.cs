@@ -3,7 +3,7 @@ using Xunit;
 
 namespace InvoiceApp.Tests;
 
-public class ApprovalServiceTests
+public partial class ApprovalServiceTests
 {
     private static Invoice InvoiceWith(string id, InvoiceStatus status, decimal amount = 100m) =>
         new() { Id = id, CustomerName = "Test School", Amount = amount, Status = status };

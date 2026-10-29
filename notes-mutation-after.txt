@@ -1,0 +1,20 @@
+Mutation result (AFTER approval limits)
+Tool: Stryker.NET 4.13.0, run from backend/tests/InvoiceApp.Tests
+Date: 2026-10-29
+Tests: 53 (was 7)
+
+WHOLE PROJECT (dotnet stryker)
+Mutants created: 94
+Killed:      52
+Survived:     1   (ApprovalService.cs:122, Any() to All(): equivalent mutant, dismissed)
+No coverage: 17   (all in DiscountCalculator.cs, existing class unrelated to approval limits, deferred)
+Timeout:      0
+The final mutation score is 74.29 %
+Baseline for comparison: 30.77 % (7 tests, 12 killed, 10 survived, 17 no coverage)
+
+APPROVAL CODE ONLY (dotnet stryker -m "**/ApprovalService.cs")
+Mutants tested: 51
+Killed:      50
+Survived:     1   (the same equivalent mutant)
+No coverage:  0
+The final mutation score is 98.04 %
