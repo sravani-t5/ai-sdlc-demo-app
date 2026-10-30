@@ -4,14 +4,14 @@ Generated from `ai-interaction-log.jsonl` by `scripts/summarize_log.py`. The JSO
 
 ## At a glance
 
-- AI interactions: 17; commits recorded automatically by the git hook: 11
+- AI interactions: 17; commits recorded automatically by the git hook: 12
 - Tools and models: Claude (claude.ai chat) / Claude Sonnet 5.5 (10); GitHub Copilot in VS Code / Auto (the Step 1 chat showed MAI-Code-1.1-Flash) (7)
-- Agents: Claude chat assistant (built-in, ask) (10); Agent mode (built-in) (built-in, agent) (3); Agent (default) (built-in, agent) (2); reviewer (custom, agent) (2)
+- Agents: Claude chat assistant (built-in, ask) (10); Agent mode (built-in) (built-in, agent) (5); reviewer (custom, agent) (2)
 - Outcomes: applied (12), rework (5)
 - Human oversight recorded: 17 of 17 interactions; verification evidence recorded: 17 of 17
-- Skills used: AGENTS.md, review-diff, speckit-constitution, speckit-plan, speckit-specify, speckit-tasks
+- Skills and custom instructions used: AGENTS.md, review-diff, speckit-constitution, speckit-plan, speckit-specify, speckit-tasks
 - Sub-agents used: none recorded
-- Tools used: file edit (5), terminal (git branch --show-current) (2), terminal (dotnet test and scripts/log-ai.sh) (2), bash_tool (git clone and read of the public demo repo) (1), web_search (Spec Kit install syntax) (1), message_compose (IT email) (1), terminal (git branch --show-current and scripts/log-ai.sh) (1), bash_tool (read index.html (1)
+- Tools used: terminal (7), file edit (5), bash_tool (4), web_search (1), message_compose (1)
 - MCP servers used: none
 - Entries reconstructed afterwards (see their limitation field): 16; later entries were written live
 - Captured automatically by Copilot hooks: no events recorded
@@ -48,8 +48,8 @@ Generated from `ai-interaction-log.jsonl` by `scripts/summarize_log.py`. The JSO
 | 6 | 2026-10-28 09:38 | GitHub Copilot in VS Code / Auto (the Step 1 chat showe... | Agent mode (built-in) (built-in, agent) | /speckit-specify: the five approval rules, assumptions and two delivery steps, stay on the branch. Follow-up: apply my corrections (R6 for Admin, a... | rework | spec.md re-read; no NEEDS CLARIFICATION markers |
 | 7 | 2026-10-28 09:38 | GitHub Copilot in VS Code / Auto (the Step 1 chat showe... | Agent mode (built-in) (built-in, agent) | /speckit-plan with technical context, then /speckit-tasks in two phases mapped to two commits. Follow-up: fix tasks.md (Admin gate in T009, approve... | rework | tasks.md has Phase 1, 2 and 3 sections with commit tasks |
 | 8 | 2026-10-28 09:44 | Claude (claude.ai chat) / Claude Sonnet 5.5 | Claude chat assistant (built-in, ask) | Install Stryker 4.13.0 and run the mutation baseline | applied | Stryker 4.13.0: 12 killed, 10 survived, 17 no coverage |
-| 9 | 2026-10-28 10:10 | GitHub Copilot in VS Code / Auto (the Step 1 chat showe... | Agent (default) (built-in, agent) | Implement Phase 1 only: Manager and Director limits, constants, ApprovalRuleViolationException, legacy Approver as Manager, reject Admin and unknow... | rework | dotnet test 14 passed; commit 8d368a4 |
-| 10 | 2026-10-28 10:49 | GitHub Copilot in VS Code / Auto (the Step 1 chat showe... | Agent (default) (built-in, agent) | Implement Phase 2 only: two distinct approvers above 500000, second a Director, same user never twice (case-insensitive, any role); tests for each ... | rework | dotnet test 37 passed; commit 2e0658f |
+| 9 | 2026-10-28 10:10 | GitHub Copilot in VS Code / Auto (the Step 1 chat showe... | Agent mode (built-in) (built-in, agent) | Implement Phase 1 only: Manager and Director limits, constants, ApprovalRuleViolationException, legacy Approver as Manager, reject Admin and unknow... | rework | dotnet test 14 passed; commit 8d368a4 |
+| 10 | 2026-10-28 10:49 | GitHub Copilot in VS Code / Auto (the Step 1 chat showe... | Agent mode (built-in) (built-in, agent) | Implement Phase 2 only: two distinct approvers above 500000, second a Director, same user never twice (case-insensitive, any role); tests for each ... | rework | dotnet test 37 passed; commit 2e0658f |
 | 11 | 2026-10-29 05:31 | Claude (claude.ai chat) / Claude Sonnet 5.5 | Claude chat assistant (built-in, ask) | Write the Playwright page object and one test for a rejected over-limit approval | applied | npm test 1 passed in 28 s; commit e40a014 |
 | 12 | 2026-10-29 05:49 | Claude (claude.ai chat) / Claude Sonnet 5.5 | Claude chat assistant (built-in, ask) | Analyse the Stryker survivors and uncovered mutants | applied | Whole project 30.77 to 74.29 percent; approval code 60.00 to 98.04 percent; commit efe6630 |
 | 13 | 2026-10-29 09:52 | GitHub Copilot in VS Code / Auto (the Step 1 chat showe... | reviewer (custom, agent) | Review the diff of this branch against main with the review-diff skill; return only the findings table | rework | Compared with files actually read by the agent |
@@ -73,3 +73,4 @@ Generated from `ai-interaction-log.jsonl` by `scripts/summarize_log.py`. The JSO
 | 2026-10-29 09:52 | 63f55c671... | docs: update AI interaction log |
 | 2026-10-29 10:27 | 5e2287f1c... | fix: reject a blank or missing approver name before approving |
 | 2026-10-29 10:32 | 8391f86b6... | docs: add ASSIGNMENT.md write-up and final mutation scores |
+| 2026-10-30 11:16 | c4ad946 | feat: structured AI interaction log with readable summary and Copilot hook |

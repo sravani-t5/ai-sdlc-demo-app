@@ -38,8 +38,8 @@ tells every agent to do both. It also stayed on feature/approval-limits for ever
   after a bug where two rows merged into one line.
 - Agents (.github/agents): spec-agent (writes spec, plan and tasks, never edits code), implementer (one task at
   a time, validate before mutating), test-agent (sub-agent of the implementer, uses write-approval-tests) and
-  reviewer (sub-agent, read-only, uses review-diff). The implementer hands off to the test agent and the reviewer.
-  TODO write which agent you picked in the Copilot agent picker for Step 1, Step 2 and the PR review (the review used reviewer).
+  reviewer (sub-agent, read-only, uses review-diff). By design the implementer hands off to the test agent and the reviewer.
+  In practice: I selected only the custom reviewer agent in the Copilot agent picker, for the pull request review (two runs in one session). The spec, implementation and test steps ran in Copilot's built-in Agent mode, which followed the instructions in AGENTS.md and used the Spec Kit skills. The spec, implementer and test agents are defined in .github/agents but I did not select them, so I did not exercise delegation between agents.
 
 ## 3. Specification (Spec Kit v0.16.0)
 Files: .specify/ (constitution and templates) and specs/001-approval-limits/ (spec, plan, research, data model,
@@ -137,4 +137,4 @@ ai-interaction-log.md is a readable summary generated from it (at a glance, huma
 scripts/log-ai.sh writes each entry, the git post-commit hook writes one per commit, and a Copilot hook configuration
 (.github/hooks/ai-log.json) records agent sessions and tool calls in ai-hook-events.jsonl where the tool supports it.
 Entries up to commit 8391f86 were reconstructed afterwards from the chat, the git history and the earlier markdown log, and say
-so in their limitation field. Later entries are written live. No MCP servers were used.
+so in their limitation field. Later entries are written live. No MCP servers were used. The repository's .mcp.json defines a Playwright MCP server, which I did not use; the Playwright test was run with npx playwright test.

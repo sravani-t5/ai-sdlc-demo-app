@@ -29,7 +29,7 @@ def main():
     outcomes = Counter(e.get("status") or "n/a" for e in ai)
     skills = sorted({s.get("name") for e in ai for s in e.get("skills_used", []) if s.get("name")})
     subagents = sorted({s.get("name") for e in ai for s in e.get("subagents_used", []) if s.get("name")})
-    tool_use = Counter(t for e in ai for t in e.get("tools_used", []))
+    tool_use = Counter(t.split(" (")[0] for e in ai for t in e.get("tools_used", []))
     mcp = sorted({m.get("server") for e in entries for m in e.get("mcp_tools_used", []) if m.get("server")})
     human = [e for e in ai if e.get("human_decision")]
     evidence = [e for e in ai if e.get("action_verification")]
@@ -47,7 +47,7 @@ def main():
            "- Agents: " + "; ".join(f"{k} ({v})" for k, v in agents.most_common()),
            "- Outcomes: " + ", ".join(f"{k} ({v})" for k, v in outcomes.most_common()),
            f"- Human oversight recorded: {len(human)} of {len(ai)} interactions; verification evidence recorded: {len(evidence)} of {len(ai)}",
-           "- Skills used: " + (", ".join(skills) or "none recorded"),
+           "- Skills and custom instructions used: " + (", ".join(skills) or "none recorded"),
            "- Sub-agents used: " + (", ".join(subagents) or "none recorded"),
            "- Tools used: " + (", ".join(f"{k} ({v})" for k, v in tool_use.most_common(8)) or "none recorded"),
            "- MCP servers used: " + (", ".join(mcp) or "none"),
