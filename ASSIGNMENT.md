@@ -4,7 +4,7 @@
 - Pull request: https://github.com/sravani-t5/ai-sdlc-demo-app/pull/1
 - Fork and branch: https://github.com/sravani-t5/ai-sdlc-demo-app (branch feature/approval-limits)
 - Demo video: TODO paste the video link here
-- AI interaction log: ai-interaction-log.md
+- AI interaction log: ai-interaction-log.jsonl (structured, one JSON entry per line) and ai-interaction-log.md (readable summary generated from it)
 
 ## Overview
 The feature adds approval limits by role to the invoice approval service of the demo app (ASP.NET Core 8):
@@ -127,3 +127,14 @@ mutation run, each with its source, a verdict and a reason.
 - Unit tests: dotnet test backend/InvoiceApp.sln
 - End-to-end: cd e2e && npm install && npx playwright install chromium && npm test
 - Mutation: cd backend/tests/InvoiceApp.Tests && dotnet stryker
+
+## AI interaction log
+ai-interaction-log.jsonl holds one entry per AI interaction with these fields: tool and model (ai_tool, model), agent details
+(agent_name, agent_type, mode), prompts and follow-ups (request), skills and sub-agents (skills_used, subagents_used), tools and
+integrations (tools_used, mcp_tools_used), AI actions and outputs (suggestion, artifacts), human intervention (human_decision),
+execution evidence (timestamp, action_verification, related_ids with commit ids) and the outcome (status, limitation).
+ai-interaction-log.md is a readable summary generated from it (at a glance, human oversight, timeline).
+scripts/log-ai.sh writes each entry, the git post-commit hook writes one per commit, and a Copilot hook configuration
+(.github/hooks/ai-log.json) records agent sessions and tool calls in ai-hook-events.jsonl where the tool supports it.
+Entries up to commit 8391f86 were reconstructed afterwards from the chat, the git history and the earlier markdown log, and say
+so in their limitation field. Later entries are written live. No MCP servers were used.

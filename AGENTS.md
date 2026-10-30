@@ -81,7 +81,7 @@ Assumptions (the spec in `specs/001-approval-limits/spec.md` is the source of tr
 - Do not change code outside the current task. Do not change existing tests to make them pass without saying why. If an existing test approves as `Admin` and now fails because of R6, say so and update it deliberately.
 - Run `dotnet test` before every commit. Commit messages say what changed and why.
 - Do not create or switch git branches. Stay on `feature/approval-limits`.
-- Log each AI interaction by running `scripts/log-ai.sh "<agent>" "<step>" "<prompt summary>" "<result summary>"`.
+- Log each AI interaction by running `scripts/log-ai.sh "<agent>" "<step>" "<prompt>" "<result>"`, optionally with `--model`, `--mode`, `--skills`, `--tools`, `--human`, `--verify`, `--status` and `--artifacts`. It writes a structured entry to `ai-interaction-log.jsonl` and regenerates the readable summary `ai-interaction-log.md`.
 
 ## Review expectations
 

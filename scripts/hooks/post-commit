@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+ROOT="$(git rev-parse --show-toplevel)"
 sha=$(git log -1 --pretty=%h)
 subject=$(git log -1 --pretty=%s)
-"$(git rev-parse --show-toplevel)/scripts/log-ai.sh" "git-hook" "commit $sha" "Commit created" "$subject"
+files=$(git diff-tree --no-commit-id --name-only -r HEAD | head -60 | paste -sd, -)
+"$ROOT/scripts/log-ai.sh" "git-hook" "commit $sha" "Commit created" "$subject" \
+  --name "post-commit hook" --type built-in --tool "git post-commit hook" --model "n/a" --mode "n/a" \
+  --stage commit --related "$sha" --verify "git commit $sha" --artifacts "$files" --status applied

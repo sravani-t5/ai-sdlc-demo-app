@@ -1,37 +1,75 @@
-# AI Interaction Log
+# AI Interaction Log (readable summary)
 
-| Time (UTC) | Agent | Step | Prompt summary | Result summary |
-|---|---|---|---|---|
-| 2026-10-27 | Claude (chat) | Planning | Asked for project plan, reviewed repo | Phased plan; found roles are only Approver/Admin |
-| 2026-10-27 | Claude (chat) | Setup | Troubleshooting .NET SDK install | Only runtime installed; asked IT for SDK 8 |
-| 2026-10-27 | Claude (chat) | Setup | Fork, clone and branch creation | Fork created, cloned, branch feature/approval-limits |
-| 2026-10-27 | Claude (chat) | Context | Drafted AGENTS.md approval rules and conventions | Added rules R1-R5, layering, test and review rules |
-| 2026-10-27 06:59 | claude-chat | context | Created logging script | Script works |
-| 2026-10-27 07:03 | git-hook | commit dc6f10c | Commit created | chore: add logging script, post-commit hook, skills and agent definitions |
-| 2026-10-27 | Claude (chat) | Setup | Installed uv and Spec Kit 0.16.0, ran specify init for Copilot | Spec Kit skills and .specify folder added |
-| 2026-10-27 | copilot (spec-kit) | constitution | Generated project constitution from AGENTS.md | .specify/memory/constitution.md v1.0.0 created |
-| 2026-10-27 | copilot (spec-kit) | specify | Generated feature spec for approval limits | specs/001-approval-limits/spec.md created |
-| 2026-10-27 | Claude (chat) | specify-review | Reviewed spec, found contradiction in FR-004 and missing Admin rule | Spec corrected; added R6 and UI reason requirement; AGENTS.md updated |
-| 2026-10-27 12:27 | claude-chat | log-fix | Fixed merged log row and script newline bug | Rows now append correctly |
-| 2026-10-28 09:38 | copilot (spec-kit) | plan | Generated plan, research, data model, contracts | plan.md and related files created |
-| 2026-10-28 09:38 | copilot (spec-kit) | tasks | Generated task breakdown in two phases | tasks.md created |
-| 2026-10-28 09:38 | claude-chat | tasks-review | Reviewed tasks.md | Fixed T009 Admin gate, added invoice approver list, legacy Approver test, mutation baseline task |
-| 2026-10-28 09:38 | git-hook | commit bbf629b | Commit created | docs: add Spec Kit constitution, specification, plan and tasks for approval limits |
-| 2026-10-28 09:44 | claude-chat | baseline | Ran Stryker 4.13.0 baseline on 7 existing tests | Score 30.77 percent (12 killed, 10 survived, 17 no coverage); saved to notes-mutation-before.txt |
-| 2026-10-28 09:44 | git-hook | commit 90c8e4e | Commit created | test: record mutation baseline before approval limits |
-| 2026-10-28 09:50 | implementer | Phase 1 | Added role-aware approval validation, named limits, and failing boundary tests for Manager/Director/Admin/unknown/legacy Approver cases | Updated ApprovalService and controller gate, then ran the solution test suite to verify the fix |
-| 2026-10-28 10:10 | claude-chat | step1-review | Reviewed Phase 1 code and tests, fixed culture-dependent currency format and a test coupled to a duplicate literal | 14 tests pass; hand mutation check (> to >=) failed 3 boundary tests as expected |
-| 2026-10-28 10:10 | git-hook | commit 8d368a4 | Commit created | feat: enforce single-approver limits by role (Manager 50k, Director 500k) |
-| 2026-10-28 10:15 | implementer | phase-2-step-2 | Implement the high-value two-approver rule in ApprovalService and add approval-list tracking plus tests for first and second approvals and duplicate/invalid second approver cases. | Updated Invoice with an approver list, enforced first/second Director validation for >500000 invoices, preserved invoice state on rejections, and verified all 23 tests pass via dotnet test backend/InvoiceApp.sln. |
-| 2026-10-28 10:37 | test-agent | phase-2-review | Review the Step 2 approval-limit tests for high-value approval scenarios and validation conventions. | Confirmed the Step 2 tests cover first/second approvals, same-user rejection cases, invalid second approver rejection, and unchanged invoice state; all 23 xUnit tests pass. |
-| 2026-10-28 10:37 | reviewer | review | Review the current approval-limits Step 2 diff against AGENTS.md and the feature spec for threshold, duplicate-user, role-validation, and state-preservation issues. | No materially incorrect findings after checking the Step 2 approval logic against the spec; thresholds, duplicate-user checks, invalid second-approver validation, and no-mutation behavior all match the rules. |
-| 2026-10-28 10:49 | copilot (implementer) + claude-chat | step2 | Implemented two-distinct-approver rule above 500000; reviewed and hardened | 37 tests pass; removed dead branch, deleted duplicate test, added tests for roles, casing, legacy Approver; casing hand mutation failed 3 tests as expected |
-| 2026-10-28 10:49 | git-hook | commit 2e0658f | Commit created | feat: require two distinct approvers (second a Director) above 500k |
-| 2026-10-29 05:30 | claude-chat | e2e | Wrote Playwright page object and test for rejected over-limit approval | 1 e2e test passes; with Manager limit temporarily raised to 60000 the test failed as expected, then limit restored |
-| 2026-10-29 05:31 | git-hook | commit e40a014 | Commit created | test: add Playwright e2e for rejected over-limit approval |
-| 2026-10-29 05:49 | claude-chat | mutation-fix | Reviewed surviving mutants, added tests and InvoiceTests, made fake repository record saves | Whole-project score 30.77 to 74.29 percent; approval code 98.04 percent; 1 equivalent mutant dismissed |
-| 2026-10-29 05:49 | git-hook | commit efe6630 | Commit created | test: strengthen approval tests to kill surviving mutants |
-| 2026-10-29 09:52 | git-hook | commit 63f55c6 | Commit created | docs: update AI interaction log |
-| 2026-10-29 10:27 | reviewer (copilot) + claude-chat | review-fix | Fixed review finding 1: blank or null approver username | Domain rejects a missing approver before any change; 7 tests added; 60 tests pass |
-| 2026-10-29 10:27 | git-hook | commit 5e2287f | Commit created | fix: reject a blank or missing approver name before approving |
-| 2026-10-29 10:32 | claude-chat | writeup | Wrote ASSIGNMENT.md and final mutation notes | Final scores recorded: whole project 76.62 percent, approval code 98.28 percent |
+Generated from `ai-interaction-log.jsonl` by `scripts/summarize_log.py`. The JSONL file is the source of truth; do not edit this file by hand.
+
+## At a glance
+
+- AI interactions: 17; commits recorded automatically by the git hook: 11
+- Tools and models: Claude (claude.ai chat) / Claude Sonnet 5.5 (10); GitHub Copilot in VS Code / Auto (the Step 1 chat showed MAI-Code-1.1-Flash) (7)
+- Agents: Claude chat assistant (built-in, ask) (10); Agent mode (built-in) (built-in, agent) (3); Agent (default) (built-in, agent) (2); reviewer (custom, agent) (2)
+- Outcomes: applied (12), rework (5)
+- Human oversight recorded: 17 of 17 interactions; verification evidence recorded: 17 of 17
+- Skills used: AGENTS.md, review-diff, speckit-constitution, speckit-plan, speckit-specify, speckit-tasks
+- Sub-agents used: none recorded
+- Tools used: file edit (5), terminal (git branch --show-current) (2), terminal (dotnet test and scripts/log-ai.sh) (2), bash_tool (git clone and read of the public demo repo) (1), web_search (Spec Kit install syntax) (1), message_compose (IT email) (1), terminal (git branch --show-current and scripts/log-ai.sh) (1), bash_tool (read index.html (1)
+- MCP servers used: none
+- Entries reconstructed afterwards (see their limitation field): 16; later entries were written live
+- Captured automatically by Copilot hooks: no events recorded
+
+## Human oversight (what I decided, corrected and verified)
+
+- 2026-10-27 **planning** [applied]: Followed the plan; forked the repo and created the branch myself
+- 2026-10-27 **setup** [applied]: Asked IT for the SDK and ran every command myself
+- 2026-10-27 **context** [applied]: Read the text, pasted it into AGENTS.md, set my git identity and committed
+- 2026-10-27 **skills-hooks-agents** [applied]: Ran the commands in pieces, verified the 8 files, tested the script and fixed a log bug where two rows merged
+- 2026-10-28 **constitution** [applied]: Allowed the terminal commands and accepted the changes after reading constitution.md
+- 2026-10-28 **specify** [rework]: Reviewed the spec with Claude, found the FR-004 versus FR-009 contradiction and the missing Admin rule, asked Copilot to correct it
+- 2026-10-28 **plan-tasks** [rework]: Reviewed tasks.md with Claude, caught that T009 would block Admin at the controller against R6, asked Copilot to fix it
+- 2026-10-28 **baseline** [applied]: Ran Stryker myself and saved the text
+- 2026-10-28 **step1-implementation** [rework]: Reviewed with Claude: replaced the machine-dependent currency format, hard-coded threshold strings and magic role names; fixed a test that depended on a duplicated literal; deliberate mistake (> to >=) failed 3 boundary tests; restored
+- 2026-10-28 **step2-implementation** [rework]: Reviewed with Claude: removed dead code and a duplicate test; added tests for roles, casing, spaces, legacy Approver and the same Director twice; deliberate mistake (case-insensitive compare to case-sensitive) failed 3 tests; restored
+- 2026-10-29 **e2e** [applied]: Installed Playwright and ran it; raised the Manager limit to 60000 as a deliberate mistake and the test failed; restored
+- 2026-10-29 **mutation-analysis** [applied]: Pasted the changes, reran Stryker, added InvoiceTests after two more survivors in Invoice.cs
+- 2026-10-29 **pr-review-run1** [rework]: Did not accept it: the agent read only 5 of about 60 changed files while manual review and mutation testing had found real issues; re-ran with a stricter prompt
+- 2026-10-29 **pr-review-run2** [applied]: Checked each finding against the code: fixed 1 (one claim was inaccurate, null roles were already rejected), deferred 2 (not reachable through the API), dismissed 3 (the brief asks for one Playwright test)
+- 2026-10-29 **review-fix** [applied]: Ran the patch; checked 60 tests pass and Stryker scores 76.62 percent (whole project) and 98.28 percent (approval code)
+- 2026-10-29 **write-up** [applied]: Edited the PR title and description on GitHub and checked that CI is green
+- 2026-10-30 **log-format** [applied]: Reviewed and ran the changes; noticed the first attempt had only partly applied and re-ran the missing steps
+
+## Timeline of AI interactions
+
+| # | Time (UTC) | Tool / model | Agent (type, mode) | Request | Outcome | Evidence |
+|---|---|---|---|---|---|---|
+| 1 | 2026-10-27 06:56 | Claude (claude.ai chat) / Claude Sonnet 5.5 | Claude chat assistant (built-in, ask) | Analyse the assignment brief and plan the work step by step; review the public demo repository | applied | git status on branch feature/approval-limits; git remote shows my fork |
+| 2 | 2026-10-27 06:56 | Claude (claude.ai chat) / Claude Sonnet 5.5 | Claude chat assistant (built-in, ask) | Fix the toolchain: .NET SDK missing (runtime only), Python, uv, Spec Kit install | applied | dotnet --version 8.0.427; specify version 0.16.0; dotnet test 7 passed |
+| 3 | 2026-10-27 06:56 | Claude (claude.ai chat) / Claude Sonnet 5.5 | Claude chat assistant (built-in, ask) | Draft the AGENTS.md additions: approval rules, layering, test and review expectations | applied | commit c9657fd |
+| 4 | 2026-10-27 07:03 | Claude (claude.ai chat) / Claude Sonnet 5.5 | Claude chat assistant (built-in, ask) | Create skills, a logging script, a post-commit hook and agent definitions | applied | find scripts .github listed 8 files; commit dc6f10c |
+| 5 | 2026-10-28 09:38 | GitHub Copilot in VS Code / Auto (the Step 1 chat showe... | Agent mode (built-in) (built-in, agent) | /speckit-constitution: create the project constitution from AGENTS.md (five principles); do not switch branches | applied | constitution.md version 1.0.0 present |
+| 6 | 2026-10-28 09:38 | GitHub Copilot in VS Code / Auto (the Step 1 chat showe... | Agent mode (built-in) (built-in, agent) | /speckit-specify: the five approval rules, assumptions and two delivery steps, stay on the branch. Follow-up: apply my corrections (R6 for Admin, a... | rework | spec.md re-read; no NEEDS CLARIFICATION markers |
+| 7 | 2026-10-28 09:38 | GitHub Copilot in VS Code / Auto (the Step 1 chat showe... | Agent mode (built-in) (built-in, agent) | /speckit-plan with technical context, then /speckit-tasks in two phases mapped to two commits. Follow-up: fix tasks.md (Admin gate in T009, approve... | rework | tasks.md has Phase 1, 2 and 3 sections with commit tasks |
+| 8 | 2026-10-28 09:44 | Claude (claude.ai chat) / Claude Sonnet 5.5 | Claude chat assistant (built-in, ask) | Install Stryker 4.13.0 and run the mutation baseline | applied | Stryker 4.13.0: 12 killed, 10 survived, 17 no coverage |
+| 9 | 2026-10-28 10:10 | GitHub Copilot in VS Code / Auto (the Step 1 chat showe... | Agent (default) (built-in, agent) | Implement Phase 1 only: Manager and Director limits, constants, ApprovalRuleViolationException, legacy Approver as Manager, reject Admin and unknow... | rework | dotnet test 14 passed; commit 8d368a4 |
+| 10 | 2026-10-28 10:49 | GitHub Copilot in VS Code / Auto (the Step 1 chat showe... | Agent (default) (built-in, agent) | Implement Phase 2 only: two distinct approvers above 500000, second a Director, same user never twice (case-insensitive, any role); tests for each ... | rework | dotnet test 37 passed; commit 2e0658f |
+| 11 | 2026-10-29 05:31 | Claude (claude.ai chat) / Claude Sonnet 5.5 | Claude chat assistant (built-in, ask) | Write the Playwright page object and one test for a rejected over-limit approval | applied | npm test 1 passed in 28 s; commit e40a014 |
+| 12 | 2026-10-29 05:49 | Claude (claude.ai chat) / Claude Sonnet 5.5 | Claude chat assistant (built-in, ask) | Analyse the Stryker survivors and uncovered mutants | applied | Whole project 30.77 to 74.29 percent; approval code 60.00 to 98.04 percent; commit efe6630 |
+| 13 | 2026-10-29 09:52 | GitHub Copilot in VS Code / Auto (the Step 1 chat showe... | reviewer (custom, agent) | Review the diff of this branch against main with the review-diff skill; return only the findings table | rework | Compared with files actually read by the agent |
+| 14 | 2026-10-29 10:27 | GitHub Copilot in VS Code / Auto (the Step 1 chat showe... | reviewer (custom, agent) | Stricter prompt: read 12 named files in full, apply every checklist item, output a findings table and a Checked and clean table with evidence | applied | commit 5e2287f; CI green on the pull request |
+| 15 | 2026-10-29 10:27 | Claude (claude.ai chat) / Claude Sonnet 5.5 | Claude chat assistant (built-in, ask) | Verify the review findings against the code and write the fix | applied | dotnet test 60 passed; commit 5e2287f |
+| 16 | 2026-10-29 10:32 | Claude (claude.ai chat) / Claude Sonnet 5.5 | Claude chat assistant (built-in, ask) | Write ASSIGNMENT.md, the final mutation notes and the pull request description with a verdict for every finding | applied | commit 8391f86; pull request 1 open |
+| 17 | 2026-10-30 11:16 | Claude (claude.ai chat) / Claude Sonnet 5.5 | Claude chat assistant (built-in, ask) | Make the AI log follow the required structured format | applied | JSONL validated; summary regenerated |
+
+## Commits recorded automatically by the post-commit hook
+
+| Time (UTC) | Commit | Message |
+|---|---|---|
+| 2026-10-27 06:56 | c9657fd2b... | docs: extend AGENTS.md with approval rules, layering, test and review expectations |
+| 2026-10-27 07:03 | dc6f10cd2... | chore: add logging script, post-commit hook, skills and agent definitions |
+| 2026-10-28 09:38 | bbf629b37... | docs: add Spec Kit constitution, specification, plan and tasks for approval limits |
+| 2026-10-28 09:44 | 90c8e4efb... | test: record mutation baseline before approval limits |
+| 2026-10-28 10:10 | 8d368a41d... | feat: enforce single-approver limits by role (Manager 50k, Director 500k) |
+| 2026-10-28 10:49 | 2e0658f50... | feat: require two distinct approvers (second a Director) above 500k |
+| 2026-10-29 05:31 | e40a0143f... | test: add Playwright e2e for rejected over-limit approval |
+| 2026-10-29 05:49 | efe663061... | test: strengthen approval tests to kill surviving mutants |
+| 2026-10-29 09:52 | 63f55c671... | docs: update AI interaction log |
+| 2026-10-29 10:27 | 5e2287f1c... | fix: reject a blank or missing approver name before approving |
+| 2026-10-29 10:32 | 8391f86b6... | docs: add ASSIGNMENT.md write-up and final mutation scores |
