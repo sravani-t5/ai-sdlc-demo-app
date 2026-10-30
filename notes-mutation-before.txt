@@ -1,0 +1,15 @@
+Mutation baseline (BEFORE approval limits)
+Tool: Stryker.NET 4.13.0, run from backend/tests/InvoiceApp.Tests
+Date: 2026-10-28
+Project mutated: InvoiceApp.Domain
+Tests found: 7
+
+Mutants created: 51
+  NoCoverage: 17 (not covered by any test)
+  Ignored:    12 (removed by block already covered filter)
+  Tested:     22
+Killed:   12
+Survived: 10
+Timeout:  0
+
+The final mutation score is 30.77 %

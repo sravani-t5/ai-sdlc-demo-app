@@ -1,0 +1,9 @@
+{
+  "version": 1,
+  "hooks": {
+    "SessionStart": [ { "type": "command", "bash": "python scripts/hooks/copilot_hook.py", "powershell": "python scripts/hooks/copilot_hook.py" } ],
+    "PostToolUse": [ { "type": "command", "bash": "python scripts/hooks/copilot_hook.py", "powershell": "python scripts/hooks/copilot_hook.py" } ],
+    "SubagentStop": [ { "type": "command", "bash": "python scripts/hooks/copilot_hook.py", "powershell": "python scripts/hooks/copilot_hook.py" } ],
+    "Stop": [ { "type": "command", "bash": "python scripts/hooks/copilot_hook.py", "powershell": "python scripts/hooks/copilot_hook.py" } ]
+  }
+}
